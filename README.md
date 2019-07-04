@@ -1,2 +1,2 @@
 # people_pairer
-Web App that pairs people based on form responses. 
+Web App that pairs people based on form responses. Made using google places and sheets API, and Javascript.
