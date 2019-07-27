@@ -95,7 +95,7 @@ function score_location(loc1, loc2){
 //Testing function. 
 function test_pls(){
 	var n1 = new Location("San Jose")
-	var n2 = new Location("San Jose")
+	var n2 = new Location("Portland OR")
 	//console.log(n1.name, n1.lat, n1.lng, n1.region)
 	console.log(JSON.stringify(n1))
 	console.log(JSON.stringify(n2))
