@@ -17,10 +17,10 @@ PairUp is a program that utilizes Javascript and several Google APIs to look for
 
 PairUp uses a number of APIs to work properly:
 
-* [Google Sheets API] - HTML enhanced for web apps!
-* [Google Places API] - Allows for Location based Pairing.
-* [Bootstrap] - improving front-end design.
-* [jQuery] - general purpose for Javascript Development
+* Google Sheets API - HTML enhanced for web apps!
+* Google Places API - Allows for Location based Pairing.
+* Bootstrap - improving front-end design.
+* jQuery - general purpose for Javascript Development
 
 ### Installation
 
