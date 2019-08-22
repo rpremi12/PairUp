@@ -1,4 +1,4 @@
-# PairUp ![PairUp_Logo](pairup_pad.png)
+# PairUp ![PairUp_Logo](PairUp_Mini.png)
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/rpremi12/PairUp)
 
