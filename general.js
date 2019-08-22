@@ -46,7 +46,7 @@ function score_major(maj1, maj2){
 //Determines which college is in based on major
 //Returns string if it is a valid major
 //Returns string 
-function get_college(major){
+function get_major(major){
 	major = major.toUpperCase()
 		//College of Agriculture
 

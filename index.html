@@ -1,13 +1,91 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <link href="style.css">
- <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>-->
-    <script src ="majors.js"></script>
+  <head>
+    <title>CSA Big Little Pairing</title>
+    <meta charset="utf-8" />
+    <style>
+	    body{
+	    	text-align:  center; 
+	    	background-color: white;
+	    	margin: 0 auto;
+	    	font-family: "Roboto" !important;
+			font-weight: 400;	
+	    }
+	    #nav{
+			display: inline !important;
+			white-space: nowrap; 
+			width: 100%;
+			margin: 0;
+	    }
+	    #nav a{
+	    	text-decoration: none;
+	    }
+	    #nav button{
+			display: none; 
+			float: left; 
+			padding:10px; 
+			background-color: #212121; 
+			color: white; 
+			border: 0;
+			font-family: "Roboto" !important;
+			font-size: 100%;
+	    }
+	    #nav button:hover{
+			display: none; 
+			float: left; 
+			padding:10px; 
+			background-color: #424242; 
+			color:#E0E0E0; 
+			border: 0;
+			font-family: "Roboto" !important;
+			font-size: 100%;
+	    }
+
+	    #nav p{
+	    	background-color: #212121;  
+	    	color:#BDBDBD !important ; 
+	    	padding: 10px; 
+	    	margin: 0;
+	    	text-align: right !important;  
+	    }
+	   
+	    #nav img{
+	    	float: right; 
+	    	margin: 0 auto;
+	    	text-align: right !important;
+	    }
+	    h1{
+	    	font-size: 300%;
+	    }
+
+
+    </style>
+  </head>
+
+  <body>
+
+	<div id = "nav">
+		<button id="authorize_button" >Authorize</button>
+		<button id="signout_button">Sign Out</button>
+		<a href= "https://github.com/rpremi12/PairUp">
+		    <p style = "">powered by PairUp<img src = "pairup_pad.png" height="20" width= "24"></p>
+		</a>
+    </div>
+    <h1>CSA Big Little Pairing</h1>
+
+    <!--Add buttons to initiate auth sequence and sign out-->
+
+
+    <pre id="content" style="white-space: pre-wrap;"></pre>
+
+    <script type="text/javascript" src = "sheets.js">  </script>
+       <script src ="majors.js"></script>
 	<script src ="pair.js"></script>
 	<script src = "general.js" > </script>
-</head>
-<body onload="get_college('Computer Science')">
 
-</body>
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  </body>
 </html>
