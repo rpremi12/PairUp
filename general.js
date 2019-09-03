@@ -1,11 +1,11 @@
 class person_location{
 	constructor(name){
 		//Accquire Json with information about their hometown.
-		const lookup = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format("Portland, OR, USA")+"&key=AIzaSyC2IEns_det_bOpV_Nqw1iPAfSScTqWyYQ"
+		const lookup = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format("Portland, OR, USA")+"&key="
 
 		//Locate the City by name through Google Maps API
 		var xmlHttp = new XMLHttpRequest({mozSystem: true});
-		xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format(name)+"&key=AIzaSyC2IEns_det_bOpV_Nqw1iPAfSScTqWyYQ",false);
+		xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format(name)+"&key=",false);
 		xmlHttp.send(null);
  		const parsed = JSON.parse(xmlHttp.responseText);
  		//console.log(parsed.results[0])
@@ -37,7 +37,7 @@ function score_major(maj1, maj2){
 		score +=1.1;
 	}
 	if(major_data[maj1.toUpperCase()].college ===major_data[maj2.toUpperCase()].college){
-		console.log("different major!s")
+		console.log("same college")
 		score +=1;
 	}
 	return score;
@@ -47,20 +47,22 @@ function score_major(maj1, maj2){
 //Returns string if it is a valid major
 //Returns string 
 function get_major(major){
-	major = major.toUpperCase()
+	return major_data[major.toUpperCase()];
 		//College of Agriculture
 
 
    // console.log((c_agr.indexOf(major)))
+
   //  console.log((c_eng.indexOf(major)))
 
+/*
 	console.log(major_data[major])
     if (c_agr.indexOf(major) !=-1){
     	return "College of Agriculture, Food and Environmental Sciences";
     }
     else if (c_arc.indexOf(major) !=-1){
     	return "College of Architecture and Environmental Design";
-    }
+    }*/
 
 
 }
@@ -72,4 +74,4 @@ function cap_arr(arr){
 	return arr
 }
 
-get_college("Computer SciEnce")
+get_major("Computer SciEnce")
