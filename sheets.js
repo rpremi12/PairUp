@@ -12,10 +12,20 @@
       var authorizeButton = document.getElementById('authorize_button');
       var signoutButton = document.getElementById('signout_button');
 
+      var to = ["Hometown", "Gender", "Major",
+                "Grad Year", "Diet", 
+                "Myer-Briggs", "Partying", "Spontaneity",
+                  "Extraversion", "Food & Drink", "TV & Movies",
+                  "Sports", "Animals", "Music",
+                  "Weird Tastes", "Hobbies"]
+      
+
       var categories = [];
       var params = [];
 
-      var csa_members = [];
+      var csa_members = {};
+
+      var currPerson = ""
       /**
        *  On load, called to load the auth2 library and API client library.
        */
@@ -99,27 +109,20 @@
                          "Foods+Drinks you dislike:" ,"TV Shows / Movies you dislike:","Sports / Team(s) you dislike:" ,
                          "Animals you dislike:", "Music you dislike:", "Weird dislikes", "What are 3 adjectives that describe you?",
                          "If you were the host of a podcast, what would you talk about?", "Biggest fears? Pet peeves?",
-                         "3 things on your bucket list?", "Who inspires you the most and why? (Non family member)",
+                         "3 things on your bucket list?", "Who inspires you the most and why? (Non family member)","Food Allergies",
                          "Name one REALLLLYYYYY stupid thing you want to do, but would never do?", "What do you want to do in SLO before you graduate?",
                          "All your classes are suddenly cancelled today! Even better you have no other responsibilities! How do you spend your day off?",
                          "You are mysteriously given $10,000 but it all disappears in a week(so you can't save it), what do you do with it?",
                          "Anything else you would board/your big to know? (You may request a big/little/family but they are not guaranteed to be paired with you) ",
                          "Submit a picture of yourself, HIGHLY recommended"   ]
         var rename = ["Hometown:", "Gender Identity:", "Major", 
-                      "Graduation Year", "Dietary Restrictions (Not Allergies)","Food Allergies",
+                      "Graduation Year", "Dietary Restrictions (Not Allergies)",
                         "Optional: Myer Briggs Score", "How much do you plan on partying?", "How spontaneous are you?", 
                         "How introverted or extroverted are you?", "Foods+Drinks you like:", "TV Shows / Movies you like:",
                           "Sports / Team(s) you like:", "Animals you like:", "Music you like:", "Weird likes:" , "What are some of your hobbies? Be as specific as possible.",
                           ]
 
-        var to = ["Hometown", "Gender", "Major",
-                "Grad Year", "Diet", "Allergies",
-                "Myer-Briggs", "Partying", "Spontaneity",
-
-                  "Extraversion", "Food & Drink", "TV & Movies",
-                  "Sports", "Animals", "Music",
-                  "Weird Tastes", "Hobbies"]
-      
+     
 
       if(nonCheck.indexOf(text) !== -1){
         return "FALSE"
@@ -141,11 +144,14 @@
         var person_name= "";
         person_name = (document.getElementById('first_name').value).toUpperCase().trim() + "_" +(document.getElementById('last_name').value).toUpperCase().trim();
         if( typeof csa_members[person_name] !== 'undefined' ){
-          appendBox(csa_members[person_name].name + " " + csa_members[person_name].matchOn)
-          return person_name
+          appendBox(csa_members[person_name].name + " " + csa_members[person_name].matchOn);
+          currPerson = person_name;
+          return person_name;
         }
         else{
-          return "YOU DUN FUCKED UP!"
+          appendBox("Name Not Found: Try Again!");
+          currPerson = "";
+          return "YOU DUN FUCKED UP!";
         }
 
     }
@@ -155,14 +161,21 @@
       var cOptions = document.forms[0];
       var txt = "";
       var i;
+      params=[];
       for (i = 0; i < cOptions.length; i++) {
         if (cOptions[i].checked) {
           params.push(cOptions[i].value)
         }
       }
 
-      console.log(findPerson())
+
+
+     // console.log(findPerson())
      console.log(params)
+
+      if(currPerson !== ""){
+          getScore()
+      }
      }
 
       /**
@@ -238,9 +251,9 @@ class Member{
     this.cpEmail = line[categories.indexOf("Cal Poly Email")] 
     this.pairType = line[categories.indexOf("Do you want to be a Big or a little?")] 
     this.name = line[categories.indexOf("First Name")] + " " + line[categories.indexOf("Last Name")]
-    this.hometown =line[categories.indexOf("Hometown:")]  //needs function
+    this.hometown =new Location (line[categories.indexOf("Hometown:")] ) //needs function
     this.gender = line[categories.indexOf("Gender Identity:")] 
-    this.major = line[categories.indexOf("Major")]  //needs function
+    this.major = get_major(line[categories.indexOf("Major")])  //needs function
     this.gradYear = line[categories.indexOf("Graduation Year")] 
     this.tSize = line[categories.indexOf("T-Shirt Size")] 
     this.birthday = line[categories.indexOf("Birthday")]  //maybe function?
