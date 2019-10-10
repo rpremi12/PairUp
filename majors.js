@@ -135,6 +135,10 @@ var major_data = {
     "major": "Environmental Earth and Soil Sciences",
     "college": "College of Agriculture"
   },
+   "ENVIRONMENTAL EARTH AND SOIL SCIENCE": {
+    "major": "Environmental Earth and Soil Sciences",
+    "college": "College of Agriculture"
+  },
   "ENVIRONMENTAL EARTH & SOIL SCIENCES": {
     "major": "Environmental Earth and Soil Sciences",
     "college": "College of Agriculture"
@@ -471,6 +475,14 @@ var major_data = {
     "major": "Industrial Engineering",
     "college": "College of Engineering"
   },
+  "LAES": {
+    "major": "Liberal Arts and Engineering",
+    "college": "College of Engineering"
+  },
+  "LIBERAL ARTS AND ENGINEERING": {
+    "major": "Liberal Arts and Engineering",
+    "college": "College of Engineering"
+  },
   "MANUFACTURING ENGINEERING": {
     "major": "Manufacturing Engineering",
     "college": "College of Engineering"
@@ -621,6 +633,18 @@ var major_data = {
   },
   "COMPARATIVE ETHNIC STUDIES": {
     "major": "Comparative Ethnic Studies",
+    "college": "College of Liberal Arts"
+  },
+   "COMMUNICATION": {
+    "major": "Communications",
+    "college": "College of Liberal Arts"
+  },
+    "COMMUNICATIONS": {
+    "major": "Communications",
+    "college": "College of Liberal Arts"
+  },
+     "COMMUNICATION STUDIES": {
+    "major": "Communications",
     "college": "College of Liberal Arts"
   },
   "CES": {
@@ -790,6 +814,9 @@ var major_data = {
   "BIOLOGICAL SCIENCES": {
     "major": "Biological Sciences",
     "college": "College of Science and Math"
+  },"BIOLOGICAL SCIENCE": {
+    "major": "Biological Sciences",
+    "college": "College of Science and Math"
   },
   "BIOLOGY": {
     "major": "Biological Sciences",
@@ -819,7 +846,7 @@ var major_data = {
     "major": "Kinesiology",
     "college": "College of Science and Math"
   },
-  "KINES": {
+  "KINE": {
     "major": "Kinesiology",
     "college": "College of Science and Math"
   },

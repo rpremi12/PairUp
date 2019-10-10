@@ -3,11 +3,11 @@
 class Location{
 	constructor(name){
 		//Accquire Json with information about their hometown.
-		const lookup = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format("Portland, OR, USA")+"&key=AIzaSyC2IEns_det_bOpV_Nqw1iPAfSScTqWyYQ"
+		const lookup = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format("Portland, OR, USA")+"&key="
 
 		//Locate the City by name through Google Maps API
 		var xmlHttp = new XMLHttpRequest({mozSystem: true});
-		xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format(name)+"&key=AIzaSyC2IEns_det_bOpV_Nqw1iPAfSScTqWyYQ",false);
+		xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format(name)+"&key=",false);
 		xmlHttp.send(null);
  		const parsed = JSON.parse(xmlHttp.responseText);
  		//console.log(parsed.results[0])
@@ -88,7 +88,7 @@ function score_location(loc1, loc2){
 		}
 	}
 	console.log("Final Score: ", score)
-	return score
+	return score;
 
 }
 
