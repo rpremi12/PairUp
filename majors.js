@@ -3,6 +3,11 @@ var major_data = {
     "major": "Agricultural Communication",
     "college": "College of Agriculture"
   },
+
+  "EXPERIENCE INDUSTRY MANAGEMENT":{
+    "major": "Experience Industry Management",
+    "college": "College of Agriculture"
+  },
   "AG COM": {
     "major": "Agricultural Communication",
     "college": "College of Agriculture"
@@ -163,6 +168,10 @@ var major_data = {
     "major": "Environmental Management and Protection",
     "college": "College of Agriculture"
   },
+  "ENVM": {
+    "major": "Environmental Management and Protection",
+    "college": "College of Agriculture"
+  },
   "FOOD SCIENCE": {
     "major": "Food Science",
     "college": "College of Agriculture"
@@ -259,6 +268,10 @@ var major_data = {
     "major": "Architectural Engineering",
     "college": "College of Architecture"
   }, 
+  "ARCE": {
+    "major": "Architectural Engineering",
+    "college": "College of Architecture"
+  },
   "ARCHE": {
     "major": "Architectural Engineering",
     "college": "College of Architecture"
@@ -687,6 +700,10 @@ var major_data = {
     "major": "Graphic Communication",
     "college": "College of Liberal Arts"
   },
+  "GRAPHIC DESIGN": {
+    "major": "Graphic Design",
+    "college": "College of Liberal Arts"
+  },
   "HISTORY": {
     "major": "History",
     "college": "College of Liberal Arts"
@@ -849,6 +866,10 @@ var major_data = {
   "KINE": {
     "major": "Kinesiology",
     "college": "College of Science and Math"
+  },
+  "INTERDISCIPLINARY" :{
+  "major": "Interdisciplinary",
+    "college": "College of Liberal Arts"
   },
   "LIBERAL STUDIES": {
     "major": "Liberal Studies",

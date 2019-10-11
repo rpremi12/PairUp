@@ -8,7 +8,7 @@ function score_gender(gen1, gen2){
 		return 1
 	}
 	else{
-		return 0
+		return 5
 	}
 }
 
@@ -28,17 +28,24 @@ function score_major(maj1, maj2){
 
 function score_grad_year(person1, person2){
 
-	var year1 = parseInt(person1.gradYear)
-	var year2 = parseInt(person2.gradYear)
+	var year1 = 2024-parseInt(person1.gradYear)
+
+	var year2 = 2024-parseInt(person2.gradYear)
 
 	console.log(person1.pairType)
 	if(person1.pairType === "Big"){
 		console.log(year1, year2)
-		if (year1 > year2){
-			return 0;
+		if (year1 < year2){
+			return -5;
 		}
 		else if ( year1 === year2){
-			return 0.5;
+			return 0.25;
+		}
+		else if (year1 -year2 == 2){
+			return 0.75;
+		}
+		else if (year1-year2 ==3){
+			return -4;
 		}
 		else{
 			return 1;
@@ -46,12 +53,17 @@ function score_grad_year(person1, person2){
 
 	}
 	else{
-		console.log("Oh shit")
-		if (year1 <year2){
-			return 0;
+		if (year1 >  year2){
+			return -5;
 		}
 		else if ( year1 === year2){
-			return 0.5;
+			return 0.25;
+		}
+		else if (year2 -year1 == 2){
+			return 0.75;
+		}
+		else if (year2-year1 >=3){
+			return -4;
 		}
 		else{
 			return 1;
@@ -277,11 +289,6 @@ function getScore(){
 		return -1;
 	}
 
-	/*
-
-     
-	*/
-
 
 	for( var cur in csa_members){
 		if(cur !== currPerson &&  csa_members[currPerson].pairType !== csa_members[cur].pairType && csa_members[cur].paired ==="f"){
@@ -343,13 +350,16 @@ function getScore(){
 			if(params.indexOf("Grad Year") !== -1){
 				var temp = score_grad_year(csa_members[currPerson], csa_members[cur]);
 				if (temp <= 0) {
-					notCommon.push("Graduation Year: Wrong Age")
+					notCommon.push("Graduation Year: Wrong Age: "+ csa_members[currPerson].gradYear + " and " + csa_members[cur].gradYear );
 				}
-				else if (temp ===0.5){
-					inCommon.push("Graduation Year: Same Graduation Year");
+				else if (temp ===0.25){
+					inCommon.push("Graduation Year: Same Graduation Year: "+ csa_members[currPerson].gradYear + " and " + csa_members[cur].gradYear );
 				}
-				else{
-					inCommon.push("Graduation: Right Age" );
+				else if (temp ===0.75){
+					inCommon.push("Graduation Year: 2 Year Gap: "+ csa_members[currPerson].gradYear + " and " + csa_members[cur].gradYear );
+				}				
+				else {
+					inCommon.push("Graduation: Close Age: " +  csa_members[currPerson].gradYear + " and " + csa_members[cur].gradYear ); 
 				}
 				score += temp;
 			}
