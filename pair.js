@@ -6,7 +6,6 @@ class Location{
 
 		//example of a lookup:
 		//const lookup = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format("Portland, OR, USA")+"&key=""
-		//AIzaSyC2IEns_det_bOpV_Nqw1iPAfSScTqWyYQ
 
 		//Locate the City by name through Google Maps API
 		var xmlHttp = new XMLHttpRequest({mozSystem: true});
@@ -29,7 +28,7 @@ class Location{
  				tn = tn.concat("+CA")
  			//console.log(tn);
 	 		 xmlHttp = new XMLHttpRequest({mozSystem: true});
-			xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+tn+"&key=AIzaSyC2IEns_det_bOpV_Nqw1iPAfSScTqWyYQ" ,false);
+			xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+tn+"&key=" ,false);
 			xmlHttp.send(null);
 	 		parsed = JSON.parse(xmlHttp.responseText);
 
