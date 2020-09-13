@@ -1,6 +1,6 @@
  // Client ID and API key from the Developer Console
-      var CLIENT_ID = '';
-      var API_KEY = '';
+      var CLIENT_ID = '637952647842-11i4ip3sq03au7qkgkjd5rpdjem5uv5b.apps.googleusercontent.com';
+      var API_KEY = 'AIzaSyCGrAMnmA7UuBarBZfJVf-8aCPr3vA5aKw';
 
       // Array of API discovery doc URLs for APIs used by the quickstart
       var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
@@ -27,6 +27,19 @@
       var csa_members = {};
 
       var currPerson = ""
+
+
+
+
+
+
+
+
+
+
+
+
+
       /**
        *  On load, called to load the auth2 library and API client library.
        */
@@ -100,8 +113,13 @@
       function appendBox(message){
       	document.getElementById('boxes').innerHTML = "<h3>" +message+"</h3>\n "
       }
+
+
+
       function finBox(name, score, incom, dif){
         var temp = "";
+                  document.getElementById('boxes').innerHTML += ("<h2> " +currPerson+ " Results: " + "</h2><br><br>")
+
           document.getElementById('boxes').innerHTML += ("<h3> " +name+ ", Score: "+ score.toFixed(2) +"</h3>")
             temp += ("<br>" + "<p style = 'color:green !important'>" )
 
@@ -148,7 +166,7 @@
           return to[rename.indexOf(text)]
         }
         else{
-                  return text
+           return text
 
         }
       }
@@ -166,7 +184,7 @@
         else{
           appendBox("Name Not Found: Try Again!");
           currPerson = "";
-          return "YOU DUN FUCKED UP!";
+          return "YOU DUN Messed UP!";
         }
 
     }
@@ -186,19 +204,23 @@
 
 
      // console.log(findPerson())
-     console.log(params)
+    /// console.log(params)
 
       if(currPerson !== ""){
 
           var matches = getScore();
+         // matches.reverse();
           var runTill = matches.length;
 
-          if(runTill >10){
-            runTill =11;
+
+
+          if(runTill >20){
+            runTill =21;
           }
           appendBox("")
 
           for(var i =1; i< runTill;i++){
+
             finBox(matches[i][1], matches[i][0],matches[i][2],matches[i][3] )
           }
 
@@ -213,12 +235,16 @@
 
        // var afterFirst = false; 
 
+
+
+
         gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1HPRjJmfm2wKLXSi4UuTcLoMHNIjm3I9qvNIEYbQ5Qyo',
           range: 'CSA FORM!A1:AQ',
         }).then(function(response) {
           var range = response.result;
           if (range.values.length > 0) {
+
             //appendBox('Name');
             //appendCheck('<div class = "testpls"> ')
             //Find categories and convert them to 
@@ -251,16 +277,24 @@
             checks += "</div></form>"
             appendCheck(checks)
             //appendBox(categories)
-            console.log(categories)
+          console.log(categories)
 
             //Fill Members
+            
+            
             for (i = 1; i < range.values.length; i++) {
               var row = range.values[i];
               csa_members[(row[3].toUpperCase().trim()+ "_" + row[4].toUpperCase().trim())] = ( new Member(row))
               // Print columns A and E, which correspond to indices 0 and 4.
+             console.log(csa_members[(row[3].toUpperCase().trim()+ "_" + row[4].toUpperCase().trim())])
               appendPre(row[3] + ' '+ row[4]+" | " + row[2] +" | " + row[11] +"\n");
             }
-            console.log(csa_members)
+
+
+             //Uncomment this to use a local database variable
+
+           //csa_members = csa_database
+           // console.log(csa_members)
           } else {
             appendPre('No data found.');
           }
@@ -297,25 +331,22 @@ class Member{
 
  //  this.foodLikes= line[categories.indexOf("Foods+Drinks you like:")] 
  //   this.foodDislikes = line[categories.indexOf("Foods+Drinks you dislike:")] 
-    this.showLikes = line[categories.indexOf("Shows and Movies you Like")] 
-    this.showDislikes =line[categories.indexOf("Shows and Movies you Dislike")] 
-    this.showRating = line[categories.indexOf("Shows and Movies Importance")] 
+    this.showLikes = convert_like_list(line[categories.indexOf("Shows and Movies you Like")]) 
+    this.showDislikes =convert_like_list(line[categories.indexOf("Shows and Movies you Dislike")]) 
+    this.showRating = convert_like_list(line[categories.indexOf("Shows and Movies Importance")])
 
 
-    this.sportsLikes =line[categories.indexOf("Sports / Team(s) you like:")] 
-    this.sportsDislikes = line[categories.indexOf("Sports / Team(s) you dislike:")] 
-    this.sportsRating = line[categories.indexOf("Sports / Teams Importance")] 
+    this.sportsLikes =convert_like_list(line[categories.indexOf("Sports / Team(s) you like:")])
+    this.sportsDislikes = convert_like_list(line[categories.indexOf("Sports / Team(s) you dislike:")])
+    this.sportsRating = convert_like_list(line[categories.indexOf("Sports / Teams Importance")])
 
+    this.musicLikes =convert_like_list(line[categories.indexOf("Music you like:")] )
+    this.musicDislikes = convert_like_list(line[categories.indexOf("Music you dislike:")]) 
+    this.musicRating = convert_like_list(line[categories.indexOf("Music Importance")] )
 
- //   this.animalLikes =line[categories.indexOf("Animals you like:")] 
- //   this.animalDislikes = line[categories.indexOf("Animals you dislike:")] 
-    this.musicLikes =line[categories.indexOf("Music you like:")] 
-    this.musicDislikes = line[categories.indexOf("Music you dislike:")] 
-    this.musicRating = line[categories.indexOf("Music Importance")] 
-
-    this.gameLikes =line[categories.indexOf("Video Games you like:")] 
-    this.gameDislikes = line[categories.indexOf("Video Games you dislike:")] 
-    this.gameRating = line[categories.indexOf("Video Game Importance")] 
+    this.gameLikes =convert_like_list(line[categories.indexOf("Video Games you like:")] )
+    this.gameDislikes = convert_like_list(line[categories.indexOf("Video Games you dislike:")] )
+    this.gameRating = convert_like_list(line[categories.indexOf("Video Game Importance")] )
 
     this.timeOfDay = line[categories.indexOf("Day or Night?")]
     this.dayTrip = line[categories.indexOf("Mountain or Beach?")]
@@ -324,6 +355,10 @@ class Member{
     this.performance = line[categories.indexOf("Interested in any of our performance groups?")]  
     
     this.paired = line[categories.indexOf("Paired")]
+    if(typeof(line[categories.indexOf("WhoPaired")] === "string")){
+          this.who = line[categories.indexOf("Paired")];
+    }
+    this.who = "";
 
 
 //    this.weirdLikes = line[categories.indexOf("Weird likes:")] 

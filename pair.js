@@ -3,14 +3,37 @@
 class Location{
 	constructor(name){
 		//Accquire Json with information about their hometown.
-		const lookup = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format("Portland, OR, USA")+"&key="
+
+		//example of a lookup:
+		//const lookup = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format("Portland, OR, USA")+"&key=""
+		//AIzaSyC2IEns_det_bOpV_Nqw1iPAfSScTqWyYQ
 
 		//Locate the City by name through Google Maps API
 		var xmlHttp = new XMLHttpRequest({mozSystem: true});
-		xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format(name)+"&key=",false);
+		xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+town_format(name)+"&key=" ,false);
 		xmlHttp.send(null);
- 		const parsed = JSON.parse(xmlHttp.responseText);
- 		//console.log(parsed.results[0])
+ 		var parsed = JSON.parse(xmlHttp.responseText);
+
+ 		//console.log(town_format(name));
+
+ 		//console.log(parsed.results);
+
+ 		if(parsed.status=="ZERO_RESULTS"){
+ 			var tn = town_format(name)
+
+ 			if(tn.indexOf("SAN+FRANCISCO+CA") !=-1)
+ 				tn= "SAN+FRAN"
+ 			else if(tn.indexOf("+CA") !=-1)
+ 				tn=tn.replace("+CA","")
+ 			else
+ 				tn = tn.concat("+CA")
+ 			//console.log(tn);
+	 		 xmlHttp = new XMLHttpRequest({mozSystem: true});
+			xmlHttp.open( "GET","https://maps.googleapis.com/maps/api/place/textsearch/json?query="+tn+"&key=AIzaSyC2IEns_det_bOpV_Nqw1iPAfSScTqWyYQ" ,false);
+			xmlHttp.send(null);
+	 		parsed = JSON.parse(xmlHttp.responseText);
+
+ 		}
 
  		//Setup classe's attributes
 		this.name = parsed.results[0].formatted_address;
@@ -22,12 +45,21 @@ class Location{
 
 //Convert name for form parsing
 function town_format(t_name){
-	return t_name.replace(/ /g, "+");
+	t_name = t_name.replace(/,/g, "")
+	return t_name.replace(/ /g, "+").toUpperCase();
 }
 //Determine the region of the person
 function region(address, lat, lng){
 
 	var places = address.split(", ");
+
+
+	if (places.length<=1){
+		return "International"
+	}
+	places[1] = places[1].replace(/[0-9]/g, '').trim();
+	//console.log(places)
+
 	if(places[1] == 'CA'){
 		if(lat >34.3 && lat <36.74){
 			return "Centeral Cal";
@@ -77,7 +109,10 @@ function score_location(loc1, loc2){
 	if (loc1.region == loc2.region){
 		//console.log("Same Region:", loc1.region)
 		score++;
+
 	}
+
+
 
 	if(distance <=50){
 		//console.log("Wow they are within 50 Miles of each other")
@@ -87,7 +122,7 @@ function score_location(loc1, loc2){
 			//console.log("They are from the same city!")
 		}
 	}
-	console.log("Final Score: ", score)
+	//console.log("Final Score: ", score)
 	return score;
 
 }
@@ -96,6 +131,7 @@ function score_location(loc1, loc2){
 function test_pls(){
 	var n1 = new Location("San Jose")
 	var n2 = new Location("Portland OR")
+
 	//console.log(n1.name, n1.lat, n1.lng, n1.region)
 	console.log(JSON.stringify(n1))
 	console.log(JSON.stringify(n2))

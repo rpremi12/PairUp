@@ -8,7 +8,7 @@ function score_gender(gen1, gen2){
 		return 1
 	}
 	else{
-		return 5
+		return 0
 	}
 }
 
@@ -16,11 +16,11 @@ function score_major(maj1, maj2){
 	var score =0;
 
 	if(major_data[maj1.major.toUpperCase()].major ===major_data[maj2.major.toUpperCase()].major){
-		console.log("same major!")
+	//	console.log("same major!")
 		score +=1.1;
 	}
 	if(major_data[maj1.major.toUpperCase()].college ===major_data[maj2.major.toUpperCase()].college){
-		console.log("same college")
+		//console.log("same college")
 		score +=1;
 	}
 	return score;
@@ -32,9 +32,9 @@ function score_grad_year(person1, person2){
 
 	var year2 = 2024-parseInt(person2.gradYear)
 
-	console.log(person1.pairType)
+//	console.log(person1.pairType)
 	if(person1.pairType === "Big"){
-		console.log(year1, year2)
+	//	console.log(year1, year2)
 		if (year1 < year2){
 			return -5;
 		}
@@ -126,7 +126,7 @@ function convert_test_list(likes){
 
 		if(likes[i].length ===0 ) {
 			formated[i] ="";
-			console.log(likes.length)
+			//console.log(likes.length)
 			continue;
 		}
 
@@ -145,17 +145,17 @@ function score_likes_dislikes(like1, dislike1, like2, dislike2){
 	//format data for processing
 	//Converting all to (uppercase) String arrays
 
-	var like1List = convert_like_list(like1);
-	var like2List = convert_like_list(like2);
+	var like1List = like1;
+	var like2List = like2;
 
-	var dislike1List = convert_like_list(dislike1);
-	var dislike2List = convert_like_list(dislike2);
+	var dislike1List = dislike1;
+	var dislike2List = dislike2;
 
-	
+	/*
 	console.log(like1List)
 	console.log(like2List)
 	console.log(dislike1List)
-	console.log(dislike2List)
+	console.log(dislike2List)*/
 
 	//Go through the dislike and like list and search for differences and commonalities 
 
@@ -168,7 +168,7 @@ function score_likes_dislikes(like1, dislike1, like2, dislike2){
 			common[2].push(like1List[i] );
 		}
 	}
-	console.log()
+	//console.log()
 
 	for (var i =0; i< dislike1List.length; i++){
 		if(like2List.indexOf(dislike1List[i]) !== -1){
@@ -183,6 +183,14 @@ function score_likes_dislikes(like1, dislike1, like2, dislike2){
 	common.push(score)
 
 	return common;
+
+}
+
+function pair(key1, key2 ){
+	csa_members[key1].paired = "t"
+	csa_members[key1].who = csa_members[key2].name
+	csa_members[key2].paired = "t"
+	csa_members[key2].who = csa_members[key1].name
 
 }
 //Determines which college is in based on major
@@ -200,7 +208,7 @@ function get_major(major){
 		parsedMajor = (parsedMajor.slice(0, parsedMajor.indexOf('>')))
 	}
 
-	console.log(parsedMajor)
+//	console.log(parsedMajor)
 	return major_data[parsedMajor.toUpperCase()];
 }
 
@@ -296,8 +304,8 @@ function getScore(){
 			var notCommon = [];
 			if(params.indexOf("Hometown") !== -1){
 				temp = score_location(csa_members[currPerson].hometown, csa_members[cur].hometown);
-				console.log("CurrPerson: " + csa_members[currPerson].hometown +   "Next Person: " + csa_members[cur].hometown +" | ")
-				console.log(temp)
+			//	console.log("CurrPerson: " + csa_members[currPerson].hometown +   "Next Person: " + csa_members[cur].hometown +" | ")
+			//	console.log(temp)
 				if (temp < 1) {
 					notCommon.push("Hometown: Not Near Each Other. ["  +csa_members[currPerson].hometown.name +   "] [" + csa_members[cur].hometown.name + "]")
 				}
@@ -330,7 +338,7 @@ function getScore(){
 			}
 
 			if(params.indexOf("Major") !== -1){
-				console.log(csa_members[currPerson], csa_members[cur])
+				//console.log(csa_members[currPerson], csa_members[cur])
 				var temp = score_major(csa_members[currPerson].major, csa_members[cur].major);
 
 				if (temp <= 0) {
@@ -349,17 +357,19 @@ function getScore(){
 			}		
 			if(params.indexOf("Grad Year") !== -1){
 				var temp = score_grad_year(csa_members[currPerson], csa_members[cur]);
+				var year1 = 2024-parseInt(csa_members[currPerson].gradYear)
+				var year2 = 2024-parseInt(csa_members[cur].gradYear)
 				if (temp <= 0) {
-					notCommon.push("Graduation Year: Wrong Age: "+ csa_members[currPerson].gradYear + " and " + csa_members[cur].gradYear );
+					notCommon.push("Graduation Year: Wrong Age: "+ year1 + " and " + year2 );
 				}
 				else if (temp ===0.25){
-					inCommon.push("Graduation Year: Same Graduation Year: "+ csa_members[currPerson].gradYear + " and " + csa_members[cur].gradYear );
+					inCommon.push("Graduation Year: Same Graduation Year: "+ year1 + " and " + year2 );
 				}
 				else if (temp ===0.75){
-					inCommon.push("Graduation Year: 2 Year Gap: "+ csa_members[currPerson].gradYear + " and " + csa_members[cur].gradYear );
+					inCommon.push("Graduation Year: 2 Year Gap: "+year1 + " and " + year2);
 				}				
 				else {
-					inCommon.push("Graduation: Close Age: " +  csa_members[currPerson].gradYear + " and " + csa_members[cur].gradYear ); 
+					inCommon.push("Graduation: Close Age: " +  year1 + " and " + year2); 
 				}
 				score += temp;
 			}
@@ -377,7 +387,7 @@ function getScore(){
 
 			if(params.indexOf("Partying") !== -1){
 				var temp = score_spectrum(csa_members[currPerson].partying, csa_members[cur].partying, true);
-				console.log("Partying: " + temp)
+				//console.log("Partying: " + temp)
 				if (temp <= 0.6) {
 					notCommon.push("Partying: " + csa_members[currPerson].partying+ " and "+ csa_members[cur].partying +".")
 				}
@@ -439,7 +449,7 @@ function getScore(){
 					inCommon.push(indexToCheck+ ": "  + p1+ " and "+ p2 +"." );
 				}
 				show_multi += (0.4-temp)*2
-				console.log(temp)
+				//console.log(temp)
 				score += temp;
 			}
 
@@ -509,8 +519,6 @@ function getScore(){
 
 
 
-
-
 			if(params.indexOf("Day vs. Night") !== -1){
 				var temp = binaryQuestions("Day", "Night" , csa_members[currPerson].timeOfDay, csa_members[cur].timeOfDay);
 				if(temp >=0.25){
@@ -534,7 +542,7 @@ function getScore(){
 				score+=temp;
 
 			}
-			console.log(params);
+			//console.log(params);
 			if(params.indexOf("Cats or Dogs?") !== -1){
 				var temp = binaryQuestions("Cats", "Dogs" , csa_members[currPerson].pets, csa_members[cur].pets);
 				if(temp >=0.25){
@@ -569,7 +577,7 @@ function getScore(){
 
 			if(params.indexOf("Shows & Movies") !== -1){
 				var temps = score_likes_dislikes(csa_members[currPerson].showLikes,csa_members[currPerson].showDislikes, csa_members[cur].showLikes,csa_members[cur].showDislikes);
-				console.log(temps);
+				//console.log(temps);
 
 				if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
 					notCommon.push("TV & Movies: No commonalities <br>" + currPerson + " Likes: "+ csa_members[currPerson].showLikes+ " and  Dislikes:"+ csa_members[currPerson].showDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].showLikes+ " and  Dislikes:"+ csa_members[cur].showDislikes +"." )
@@ -598,7 +606,7 @@ function getScore(){
 
 			if(params.indexOf("Sports") !== -1){
 				var temps = score_likes_dislikes(csa_members[currPerson].sportsLikes,csa_members[currPerson].sportsDislikes, csa_members[cur].sportsLikes,csa_members[cur].sportsDislikes);
-				console.log(temps);
+			//	console.log(temps);
 
 				if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
 					notCommon.push("Sports: No commonalities <br>" + currPerson + " Likes: "+ csa_members[currPerson].sportsLikes+ " and  Dislikes:"+ csa_members[currPerson].sportsDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].sportsLikes+ " and  Dislikes:"+ csa_members[cur].sportsDislikes +"." )
@@ -627,7 +635,7 @@ function getScore(){
 
 			if(params.indexOf("Music") !== -1){
 				var temps = score_likes_dislikes(csa_members[currPerson].musicLikes,csa_members[currPerson].musicDislikes, csa_members[cur].musicLikes,csa_members[cur].musicDislikes);
-				console.log(temps);
+			//	console.log(temps);
 
 				if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
 					notCommon.push("Music: No commonalities <br>" + currPerson + " Likes: "+ csa_members[currPerson].musicLikes+ " and  Dislikes:"+ csa_members[currPerson].musicDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].musicLikes+ " and  Dislikes:"+ csa_members[cur].musicDislikes +"." )
@@ -656,7 +664,7 @@ function getScore(){
 
 			if(params.indexOf("Video Games") !== -1){
 				var temps = score_likes_dislikes(csa_members[currPerson].gameLikes,csa_members[currPerson].gameDislikes, csa_members[cur].gameLikes,csa_members[cur].gameDislikes);
-				console.log(temps);
+			//	console.log(temps);
 
 				if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
 					notCommon.push("Video Games: No commonalities <br>" + currPerson + " Likes: "+ csa_members[currPerson].gameLikes+ " and  Dislikes:"+ csa_members[currPerson].gameDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].gameLikes+ " and  Dislikes:"+ csa_members[cur].gameDislikes +"." )
@@ -694,7 +702,7 @@ function getScore(){
 		return b[0] - a[0]
 	});
 	choices.splice(0,0,  calcTotalScore());
-	console.log(choices)
+//	console.log(choices)
 	return choices;
 
 	//console.log(Object.keys(csa_members).length)
