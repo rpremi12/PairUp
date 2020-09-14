@@ -233,9 +233,7 @@ function calcTotalScore(){
 	return fin_score
 }
 
-function LikeFormatter(name){
 
-}
 
 function binaryQuestions(firstStr, secondStr, strToTest1, strToTest2){
 	if(strToTest1 === firstStr &&strToTest2 === firstStr ){
@@ -284,12 +282,168 @@ function scorePerformance(p1, p2){
 	return tempScore
 }
 
-function getScore(){
 
 
-	var score = 0;
+function hometownScore(obj, cp,  c){
+	var temp = score_location(cp, c);
+
+				if (temp < 1) {
+					obj["notCommon"].push("Hometown: Not Near Each Other. ["  +cp.name +   "] [" + c.name + "]")
+				}
+				else{
+					if(temp >= 1 && temp < 2){
+					obj["inCommon"].push("Hometown: Same Region as each other (" + cp.region + "). ["+ cp.name +   "] [" + c.name + "]" )
+
+					}
+					else if(temp >=2 && temp <3){
+						obj["inCommon"].push("Hometown: Within 50 Miles and Same Region as each other (" + cp.region + "). ["+ cp.name +   "] [" + c.name + "]" )
+					   
+					}
+					else {
+						obj["inCommon"].push("Hometown: Same Hometown, " + cp.name +".")
+					}
+
+				}
+				obj["score"] += (temp/2)
+
+}
+
+
+function genderScore(obj, cp,c){
+	var temp =  score_gender(cp, c);
+
+	if (temp <= 0) {
+		obj["notCommon"].push("Gender: Different Genders");
+	}
+	else{
+		obj["inCommon"].push("Gender: Same Gender" );
+	}
+	obj["score"] += temp;
+}
+
+function majorScore(obj, cp,c){
+	var temp = score_major(cp, c);
+
+		if (temp <= 0) {
+			obj["notCommon"].push("Major: Not Similar Majors at all, "+ cp.major + " and " + c.major +"." );
+		}
+		else{
+			if(temp === 1){
+				obj["inCommon"].push("Major: Same College as each other, " + cp.college + ". "+ cp.major + " and " + c.major +"." );
+			}
+			else {
+				obj["inCommon"].push("Major: Same Major, " + cp.major+".")
+			}
+		}
+
+		obj["score"] += temp;
+}
+
+function gradScore(obj,cp,c){
+
+	var temp = score_grad_year(cp, c);
+	var year1 = 2024-parseInt(cp.gradYear)
+	var year2 = 2024-parseInt(c.gradYear)
+
+	if (temp <= 0) {
+		obj["notCommon"].push("Graduation Year: Wrong Age: "+ year1 + " and " + year2 );
+	}
+	else if (temp ===0.25){
+		obj["inCommon"].push("Graduation Year: Same Graduation Year: "+ year1 + " and " + year2 );
+	}
+	else if (temp ===0.75){
+		obj["inCommon"].push("Graduation Year: 2 Year Gap: "+year1 + " and " + year2);
+	}				
+	else {
+		obj["inCommon"].push("Graduation: Close Age: " +  year1 + " and " + year2); 
+	}
+	obj["score"] += temp;
+}
+
+function specScore(obj, cp,c,nam){
+	var temp=0
+	if(nam=="Diet"){
+		temp = score_diet(cp, c)
+		if (temp <= 0) {
+			obj["notCommon"].push("Diet: " + cp + " and "+ c +".")
+		}
+		else{
+			obj["inCommon"].push("Diet: "  + cp + " and "+ c +"." );
+		}
+		console.log(temp)
+	}
+	else{
+		temp = score_spectrum(cp,c,true)
+
+		if (temp <= 0.6) {
+			obj["notCommon"].push(nam+": " + cp+ " and "+ c +".")
+		}
+		else{
+			obj["inCommon"].push(nam+": "  + cp+ " and "+ c+"." );
+		}
+	}
 	
-	var temp=0;
+		obj["score"] += temp;
+		console.log(obj);
+				
+}
+function perScore(obj,cp,c){
+	var temp = scorePerformance( cp, c)
+	if(temp ===0.5 ){
+		obj["inCommon"].push("Performance: Both Not Interested");
+	}
+	else if(temp > 0.5){
+		obj["inCommon"].push("Performance: " + cp+ " and " + c)
+	}
+	else{
+		obj["notCommon"].push("Performance: " + cp+ " and " + c)
+	}
+	obj["score"]+=temp;
+}
+function binScore(obj, cp,c,nam, o1, o2){
+
+	var temp = binaryQuestions(o1, o2 , cp, c);
+	if(temp >=0.25){
+		obj["inCommon"].push(nam+": " + cp +" and " +c)
+	}
+	else{
+		obj["notCommon"].push(nam+": " + cp +" and " + c)
+	}
+	obj["score"]+=temp;
+}
+
+
+function likesScore(obj, cpl,cpd,cl,cd, nam, n1, n2){
+	var temps = score_likes_dislikes( cpl,cpd,cl,cd);
+	//console.log(temps);
+
+	if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
+		obj["notCommon"].push(nam + " No commonalities <br>" + n1 + " Likes: "+ cpl+ " and  Dislikes:"+ cpd +". <br>"+ n2+ " Likes: "+ cl+ " and  Dislikes:"+ cd +"." )
+	}
+	else if (temps[2].length > 0 && temps[0].length === 0  && temps[1].length === 0 ){
+		obj["notCommon"].push(nam + ": Disagress on " + temps[2] +"<br>" + n1 + " Likes: "+ cpl + " and  Dislikes:"+ cpd +". <br>"+ n2 + " Likes: "+ cl+ " and  Dislikes:"+ cd +"." )
+	}
+
+	else if (temps[2].length > 0 ){
+		obj["notCommon"].push(nam+": Disagrees on " + temps[2] + ".")
+	}
+
+	if (temps[0].length > 0 && temps[1].length >0){
+		obj["inCommon"].push(nam+": Commonalities " + temps[0]+ " and "+ temps[1] );
+	}
+	else if(temps[0].length >0 && temps[1].length ===  0){
+		obj["inCommon"].push(nam+": Commonalities " + temps[0]+ "." );
+
+	}
+	else if(temps[0].length ===0 && temps[1].length>  0){
+		obj["inCommon"].push(nam+": Commonalities " + temps[1]+ "." );
+
+	}
+	obj["score"] += temps[3];
+}
+
+
+function getScore(){
 
 	var choices = [];
 
@@ -297,404 +451,70 @@ function getScore(){
 		return -1;
 	}
 
-
 	for( var cur in csa_members){
 		if(cur !== currPerson &&  csa_members[currPerson].pairType !== csa_members[cur].pairType && csa_members[cur].paired ==="f"){
-			var inCommon = [];
-			var notCommon = [];
-			if(params.indexOf("Hometown") !== -1){
-				temp = score_location(csa_members[currPerson].hometown, csa_members[cur].hometown);
-			//	console.log("CurrPerson: " + csa_members[currPerson].hometown +   "Next Person: " + csa_members[cur].hometown +" | ")
-			//	console.log(temp)
-				if (temp < 1) {
-					notCommon.push("Hometown: Not Near Each Other. ["  +csa_members[currPerson].hometown.name +   "] [" + csa_members[cur].hometown.name + "]")
-				}
-				else{
-					if(temp >= 1 && temp < 2){
-					inCommon.push("Hometown: Same Region as each other (" + csa_members[currPerson].hometown.region + "). ["+ csa_members[currPerson].hometown.name +   "] [" + csa_members[cur].hometown.name + "]" )
 
-					}
-					else if(temp >=2 && temp <3){
-						inCommon.push("Hometown: Within 50 Miles and Same Region as each other (" + csa_members[currPerson].hometown.region + "). ["+ csa_members[currPerson].hometown.name +   "] [" + csa_members[cur].hometown.name + "]" )
-					   
-					}
-					else {
-						inCommon.push("Hometown: Same Hometown, " + csa_members[currPerson].hometown.name +".")
-					}
-
-				}
-				score += (temp/2)
+			var resObj = {
+				"inCommon" : [],
+				"notCommon" : [],
+				"score" : 0
 			}
 
-			if(params.indexOf("Gender") !== -1){
-				var temp =  score_gender(csa_members[currPerson].gender, csa_members[cur].gender);
-				if (temp <= 0) {
-					notCommon.push("Gender: Different Genders");
-				}
-				else{
-					inCommon.push("Gender: Same Gender" );
-				}
-				score += temp;
-			}
-
-			if(params.indexOf("Major") !== -1){
-				//console.log(csa_members[currPerson], csa_members[cur])
-				var temp = score_major(csa_members[currPerson].major, csa_members[cur].major);
-
-				if (temp <= 0) {
-					notCommon.push("Major: Not Similar Majors at all, "+ csa_members[currPerson].major.major + " and " + csa_members[cur].major.major +"." );
-				}
-				else{
-					if(temp === 1){
-						inCommon.push("Major: Same College as each other, " + csa_members[currPerson].major.college + ". "+ csa_members[currPerson].major.major + " and " + csa_members[cur].major.major +"." );
-					}
-					else {
-						inCommon.push("Major: Same Major, " + csa_members[currPerson].major.major+".")
-					}
-				}
-
-				score += temp;
-			}		
-			if(params.indexOf("Grad Year") !== -1){
-				var temp = score_grad_year(csa_members[currPerson], csa_members[cur]);
-				var year1 = 2024-parseInt(csa_members[currPerson].gradYear)
-				var year2 = 2024-parseInt(csa_members[cur].gradYear)
-				if (temp <= 0) {
-					notCommon.push("Graduation Year: Wrong Age: "+ year1 + " and " + year2 );
-				}
-				else if (temp ===0.25){
-					inCommon.push("Graduation Year: Same Graduation Year: "+ year1 + " and " + year2 );
-				}
-				else if (temp ===0.75){
-					inCommon.push("Graduation Year: 2 Year Gap: "+year1 + " and " + year2);
-				}				
-				else {
-					inCommon.push("Graduation: Close Age: " +  year1 + " and " + year2); 
-				}
-				score += temp;
-			}
-			if(params.indexOf("Diet") !== -1){
-				var temp =  score_diet(csa_members[currPerson].dietary, csa_members[cur].dietary);
-				if (temp <= 0) {
-					notCommon.push("Diet: " + csa_members[currPerson].dietary + " and "+ csa_members[cur].dietary +".")
-				}
-				else{
-					inCommon.push("Diet: "  + csa_members[currPerson].dietary + " and "+ csa_members[cur].dietary +"." );
-				}
-				score += temp;
-			}
-
-
-			if(params.indexOf("Partying") !== -1){
-				var temp = score_spectrum(csa_members[currPerson].partying, csa_members[cur].partying, true);
-				//console.log("Partying: " + temp)
-				if (temp <= 0.6) {
-					notCommon.push("Partying: " + csa_members[currPerson].partying+ " and "+ csa_members[cur].partying +".")
-				}
-				else{
-					inCommon.push("Partying: "  + csa_members[currPerson].partying+ " and "+ csa_members[cur].partying +"." );
-				}
-				score += temp;
-
-			}
-			if(params.indexOf("Spontaneity") !== -1){
-				var temp = score_spectrum(csa_members[currPerson].spontan, csa_members[cur].spontan, true);
-				if (temp <= 0.6) {
-					notCommon.push("Spontaneity: " + csa_members[currPerson].spontan+ " and "+ csa_members[cur].spontan +".")
-				}
-				else{
-					inCommon.push("Spontaneity: "  + csa_members[currPerson].spontan+ " and "+ csa_members[cur].spontan +"." );
-				}
-				score += temp;
-			}
-			if(params.indexOf("Extraversion") !== -1){
-				var temp = score_spectrum(csa_members[currPerson].trovert, csa_members[cur].trovert, true);
-				if (temp <= 0.6) {
-					notCommon.push("Extraversion: " + csa_members[currPerson].trovert+ " and "+ csa_members[cur].trovert +".")
-				}
-				else{
-					inCommon.push("Extraversion:"  + csa_members[currPerson].trovert+ " and "+ csa_members[cur].trovert +"." );
-				}
-				score += temp;
-			}
-
-
-			if(params.indexOf("Games") !== -1){
-				var temp = score_spectrum(csa_members[currPerson].games, csa_members[cur].games, true);
-				if (temp <= 0.6) {
-					notCommon.push("Games: " + csa_members[currPerson].games+ " and "+ csa_members[cur].games +".")
-				}
-				else{
-					inCommon.push("Games: "  + csa_members[currPerson].games+ " and "+ csa_members[cur].games +"." );
-				}
-				score += temp;
-			}
-
-
-			var show_multi = 1;
-			var sports_multi =1;
-			var music_multi =1;
-			var games_multi =1;
-
-			var indexToCheck ="";
-			indexToCheck = "Shows & Movies";
-			if(params.indexOf(indexToCheck) !== -1){
-				var p1 = csa_members[currPerson].showRating ;
-				var p2 =  csa_members[cur].showRating;
-				var temp = score_spectrum(p1, p2, true);
-				if (temp <= 0.7) {
-					notCommon.push(indexToCheck+": " + p1+ " and "+ p2 +".")
-				}
-				else{
-					inCommon.push(indexToCheck+ ": "  + p1+ " and "+ p2 +"." );
-				}
-				show_multi += (0.4-temp)*2
-				//console.log(temp)
-				score += temp;
-			}
-
-			indexToCheck = "Sports";
-			if(params.indexOf(indexToCheck) !== -1){
-				var p1 = csa_members[currPerson].sportsRating ;
-				var p2 =  csa_members[cur].sportsRating;
-				var temp = score_spectrum(p1, p2, true);
-				if (temp <= 0.7) {
-					notCommon.push(indexToCheck+": " + p1+ " and "+ p2 +".")
-				}
-				else{
-					inCommon.push(indexToCheck+ ": "  + p1+ " and "+ p2 +"." );
-				}
-				sports_multi += (0.4-temp)*2
-				score += temp;
-			}
-
-
-			indexToCheck = "Music";
-			if(params.indexOf(indexToCheck) !== -1){
-				var p1 = csa_members[currPerson].musicRating ;
-				var p2 =  csa_members[cur].musicRating;
-				var temp = score_spectrum(p1, p2, true);
-				if (temp <= 0.7) {
-					notCommon.push(indexToCheck+": " + p1+ " and "+ p2 +".")
-				}
-				else{
-					inCommon.push(indexToCheck+ ": "  + p1+ " and "+ p2 +"." );
-				}
-				music_multi += (0.4-temp)*2;
-				score += temp;
-			}
-
-			indexToCheck = "Video Games";
-			if(params.indexOf(indexToCheck) !== -1){
-				var p1 = csa_members[currPerson].gameRating ;
-				var p2 =  csa_members[cur].gameRating;
-				var temp = score_spectrum(p1, p2, true);
-				if (temp <= 0.7) {
-					notCommon.push(indexToCheck+": " + p1+ " and "+ p2 +".")
-				}
-				else{
-					inCommon.push(indexToCheck+ ": "  + p1+ " and "+ p2 +"." );
-				}
-				games_multi += (0.4-temp)*2
-				score += temp;
-			}
-
-			if(params.indexOf("Performance")!=-1){
-				var temp = scorePerformance( csa_members[currPerson].performance, csa_members[cur].performance)
-				if(temp ===0.5 ){
-					inCommon.push("Performance: Both Not Interested");
-				}
-				else if(temp > 0.5){
-					inCommon.push("Performance: " + csa_members[currPerson].performance+ " and " + csa_members[cur].performance);
-				}
-				else{
-					notCommon.push("Performance: " + csa_members[currPerson].performance+ " and " + csa_members[cur].performance);
-				}
-				score+=temp;
-			}
-
-
-
-
-
-
-
-			if(params.indexOf("Day vs. Night") !== -1){
-				var temp = binaryQuestions("Day", "Night" , csa_members[currPerson].timeOfDay, csa_members[cur].timeOfDay);
-				if(temp >=0.25){
-					inCommon.push("Day vs. Night: " + csa_members[currPerson].timeOfDay +" and " +csa_members[cur].timeOfDay)
-				}
-				else{
-					notCommon.push("Day vs. Night: " + csa_members[currPerson].timeOfDay +" and " +csa_members[cur].timeOfDay)
-				}
-				score+=temp;
-			}
-
-
-			if(params.indexOf("Day Trip") !== -1){
-				var temp = binaryQuestions("Mountain", "Beach" , csa_members[currPerson].dayTrip, csa_members[cur].dayTrip);
-				if(temp >=0.25){
-					inCommon.push("Day Trip: " + csa_members[currPerson].dayTrip +" and " +csa_members[cur].dayTrip)
-				}
-				else{
-					notCommon.push("Day Trip: " + csa_members[currPerson].dayTrip +" and " +csa_members[cur].dayTrip)
-				}
-				score+=temp;
-
-			}
-			//console.log(params);
-			if(params.indexOf("Cats or Dogs?") !== -1){
-				var temp = binaryQuestions("Cats", "Dogs" , csa_members[currPerson].pets, csa_members[cur].pets);
-				if(temp >=0.25){
-					inCommon.push("Cats or Dogs: " + csa_members[currPerson].pets +" and " +csa_members[cur].pets)
-				}
-				else{
-					notCommon.push("Cats or Dogs: " + csa_members[currPerson].pets +" and " +csa_members[cur].pets)
-				}				
-				score+=temp;
-
-			}		
-			
-			if(params.indexOf("Cereal") !== -1){
-				var temp = binaryQuestions("Cereal first", "Milk first" , csa_members[currPerson].cereal, csa_members[cur].cereal);
-				if(temp >=0.25){
-					inCommon.push("Cereal: " + csa_members[currPerson].cereal +" and " +csa_members[cur].cereal)
-				}
-				else{
-					notCommon.push("Cereal: " + csa_members[currPerson].cereal +" and " +csa_members[cur].cereal)
-				}
-				score+=temp;
-
-			}	
-
-
-
-
-
-
-
-
-
-			if(params.indexOf("Shows & Movies") !== -1){
-				var temps = score_likes_dislikes(csa_members[currPerson].showLikes,csa_members[currPerson].showDislikes, csa_members[cur].showLikes,csa_members[cur].showDislikes);
-				//console.log(temps);
-
-				if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
-					notCommon.push("TV & Movies: No commonalities <br>" + currPerson + " Likes: "+ csa_members[currPerson].showLikes+ " and  Dislikes:"+ csa_members[currPerson].showDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].showLikes+ " and  Dislikes:"+ csa_members[cur].showDislikes +"." )
-				}
-				else if (temps[2].length > 0 && temps[0].length === 0  && temps[1].length === 0 ){
-					notCommon.push("TV & Movies: Disagress on " + temps[2] +"<br>" + currPerson + " Likes: "+ csa_members[currPerson].showLikes+ " and  Dislikes:"+ csa_members[currPerson].showDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].showLikes+ " and  Dislikes:"+ csa_members[cur].showDislikes +"." )
-				}
-
-				else if (temps[2].length > 0 ){
-					notCommon.push("TV & Movies: Disagrees on " + temps[2] + ".")
-				}
-
-				if (temps[0].length > 0 && temps[1].length >0){
-					inCommon.push("TV & Movies: Commonalities " + temps[0]+ " and "+ temps[1] );
-				}
-				else if(temps[0].length >0 && temps[1].length ===  0){
-					inCommon.push("TV & Movies: Commonalities " + temps[0]+ "." );
-
-				}
-				else if(temps[0].length ===0 && temps[1].length>  0){
-					inCommon.push("TV & Movies: Commonalities " + temps[1]+ "." );
-
-				}
-				score += temps[3];
-			}
-
-			if(params.indexOf("Sports") !== -1){
-				var temps = score_likes_dislikes(csa_members[currPerson].sportsLikes,csa_members[currPerson].sportsDislikes, csa_members[cur].sportsLikes,csa_members[cur].sportsDislikes);
-			//	console.log(temps);
-
-				if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
-					notCommon.push("Sports: No commonalities <br>" + currPerson + " Likes: "+ csa_members[currPerson].sportsLikes+ " and  Dislikes:"+ csa_members[currPerson].sportsDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].sportsLikes+ " and  Dislikes:"+ csa_members[cur].sportsDislikes +"." )
-				}
-				else if (temps[2].length > 0 && temps[0].length === 0  && temps[1].length === 0 ){
-					notCommon.push("Sports: Disagress on " + temps[2]+ "<br>" + currPerson + " Likes: "+ csa_members[currPerson].sportsLikes+ " and  Dislikes:"+ csa_members[currPerson].sportsDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].sportsLikes+ " and  Dislikes:"+ csa_members[cur].sportsDislikes +"." )
-				}
-
-				else if (temps[2].length > 0 ){
-					notCommon.push("Sports: Disagrees on " + temps[2] + ".")
-				}
-
-				if (temps[0].length > 0 && temps[1].length >0){
-					inCommon.push("Sports: Commonalities " + temps[0]+ " and "+ temps[1] );
-				}
-				else if(temps[0].length >0 && temps[1].length ===  0){
-					inCommon.push("Sports: Commonalities " + temps[0]+ "." );
-
-				}
-				else if(temps[0].length ===0 && temps[1].length>  0){
-					inCommon.push("Sports: Commonalities " + temps[1]+ "." );
-
-				}
-				score += temps[3];
-			}
-
-			if(params.indexOf("Music") !== -1){
-				var temps = score_likes_dislikes(csa_members[currPerson].musicLikes,csa_members[currPerson].musicDislikes, csa_members[cur].musicLikes,csa_members[cur].musicDislikes);
-			//	console.log(temps);
-
-				if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
-					notCommon.push("Music: No commonalities <br>" + currPerson + " Likes: "+ csa_members[currPerson].musicLikes+ " and  Dislikes:"+ csa_members[currPerson].musicDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].musicLikes+ " and  Dislikes:"+ csa_members[cur].musicDislikes +"." )
-				}
-				else if (temps[2].length > 0 && temps[0].length === 0  && temps[1].length === 0 ){
-					notCommon.push("Music: Disagress on " + temps[2]+ "<br>" + currPerson + " Likes: "+ csa_members[currPerson].musicLikes+ " and  Dislikes:"+ csa_members[currPerson].musicDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].musicLikes+ " and  Dislikes:"+ csa_members[cur].musicDislikes +"." )
-				}
-
-				else if (temps[2].length > 0 ){
-					notCommon.push("Music: Disagrees on " + temps[2] + ".")
-				}
-
-				if (temps[0].length > 0 && temps[1].length >0){
-					inCommon.push("Music: Commonalities " + temps[0]+ " and "+ temps[1] );
-				}
-				else if(temps[0].length >0 && temps[1].length ===  0){
-					inCommon.push("Music: Commonalities " + temps[0]+ "." );
-
-				}
-				else if(temps[0].length ===0 && temps[1].length>  0){
-					inCommon.push("Music: Commonalities " + temps[1]+ "." );
-
-				}
-				score += temps[3];
-			}
-
-			if(params.indexOf("Video Games") !== -1){
-				var temps = score_likes_dislikes(csa_members[currPerson].gameLikes,csa_members[currPerson].gameDislikes, csa_members[cur].gameLikes,csa_members[cur].gameDislikes);
-			//	console.log(temps);
-
-				if (temps[0].length === 0  && temps[1].length === 0  &&temps[2].length === 0  ) {
-					notCommon.push("Video Games: No commonalities <br>" + currPerson + " Likes: "+ csa_members[currPerson].gameLikes+ " and  Dislikes:"+ csa_members[currPerson].gameDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].gameLikes+ " and  Dislikes:"+ csa_members[cur].gameDislikes +"." )
-				}
-				else if (temps[2].length > 0 && temps[0].length === 0  && temps[1].length === 0 ){
-					notCommon.push("Video Games: Disagress on " + temps[2]+ "<br>" + currPerson + " Likes: "+ csa_members[currPerson].gameLikes+ " and  Dislikes:"+ csa_members[currPerson].gameDislikes +". <br>"+cur + " Likes: "+ csa_members[cur].gameLikes+ " and  Dislikes:"+ csa_members[cur].gameDislikes +"." )
-				}
-
-				else if (temps[2].length > 0 ){
-					notCommon.push("Video Games: Disagrees on " + temps[2] + ".")
-				}
-
-				if (temps[0].length > 0 && temps[1].length >0){
-					inCommon.push("Video Games: Commonalities " + temps[0]+ " and "+ temps[1] );
-				}
-				else if(temps[0].length >0 && temps[1].length ===  0){
-					inCommon.push("Video Games: Commonalities " + temps[0]+ "." );
-
-				}
-				else if(temps[0].length ===0 && temps[1].length>  0){
-					inCommon.push("Video Games: Commonalities " + temps[1]+ "." );
-
-				}
-				score += temps[3];
-			}
-
+			if(params.indexOf("Hometown") !== -1)
+				hometownScore(resObj,csa_members[currPerson].hometown, csa_members[cur].hometown );
 		
+			if(params.indexOf("Gender") !== -1)
+				genderScore(resObj, csa_members[currPerson].gender, csa_members[cur].gender)
 
-			choices.push([score, cur, inCommon, notCommon])
-			score =0;
+			if(params.indexOf("Major") !== -1)
+				majorScore(resObj, csa_members[currPerson].major, csa_members[cur].major)
+
+			if(params.indexOf("Grad Year") !== -1)
+				gradScore(resObj, csa_members[currPerson], csa_members[cur])
+
+			if(params.indexOf("Diet") !== -1)
+				specScore(resObj, csa_members[currPerson].dietary, csa_members[cur].dietary, "Diet")
+
+			if(params.indexOf("Partying") !== -1)
+				specScore(resObj, csa_members[currPerson].partying, csa_members[cur].partying, "Partying")
+
+			if(params.indexOf("Spontaneity") !== -1)
+				specScore(resObj,csa_members[currPerson].spontan, csa_members[cur].spontan, "Spontaneity")
+
+			if(params.indexOf("Extraversion") !== -1)
+				specScore(resObj,csa_members[currPerson].trovert, csa_members[cur].trovert, "Extraversion")
+
+			if(params.indexOf("Games") !== -1)
+				specScore(resObj,csa_members[currPerson].games, csa_members[cur].games, "Games")
+
+			if(params.indexOf("Day vs. Night") !== -1)//{
+				binScore(resObj, csa_members[currPerson].timeOfDay, csa_members[cur].timeOfDay, "Day", "Night")
+
+			if(params.indexOf("Day Trip") !== -1)
+				binScore(resObj,  csa_members[currPerson].dayTrip, csa_members[cur].dayTrip,"Mountain", "Beach")
+
+			if(params.indexOf("Cats or Dogs?") !== -1)//{
+				binScore(resObj, csa_members[currPerson].pets, csa_members[cur].pets,"Cats", "Dogs" )
+
+			if(params.indexOf("Cereal") !== -1)
+				binScore(resObj, csa_members[currPerson].cereal, csa_members[cur].cereal, "Cereal first", "Milk first" )
+
+			if(params.indexOf("Shows & Movies") !== -1)
+				likesScore(resObj, csa_members[currPerson].showLikes,csa_members[currPerson].showDislikes, csa_members[cur].showLikes,csa_members[cur].showDislikes, "Shows & Movies", currPerson,cur)
+
+			if(params.indexOf("Sports") !== -1)
+				likesScore(resObj, csa_members[currPerson].sportsLikes,csa_members[currPerson].sportsDislikes, csa_members[cur].sportsLikes,csa_members[cur].sportsDislikes, "Sports", currPerson,cur)
+
+			if(params.indexOf("Music") !== -1)
+				likesScore(resObj, csa_members[currPerson].musicLikes,csa_members[currPerson].musicDislikes, csa_members[cur].musicLikes,csa_members[cur].musicDislikes, "Music", currPerson,cur)
+
+			if(params.indexOf("Video Games") !== -1)
+				likesScore(resObj,csa_members[currPerson].gameLikes,csa_members[currPerson].gameDislikes, csa_members[cur].gameLikes,csa_members[cur].gameDislikes, "Video Games", currPerson, cur )
+		
+			if(params.indexOf("Performance")!=-1)
+				perScore(resObj,  csa_members[currPerson].performance, csa_members[cur].performance)
+			
+			choices.push([resObj["score"], cur, resObj["inCommon"],resObj["notCommon"]])
 		}
 	}
 
@@ -702,9 +522,7 @@ function getScore(){
 		return b[0] - a[0]
 	});
 	choices.splice(0,0,  calcTotalScore());
-//	console.log(choices)
+
 	return choices;
 
-	//console.log(Object.keys(csa_members).length)
 }
-//get_major("Computer SciEnce")

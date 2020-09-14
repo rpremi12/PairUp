@@ -120,6 +120,8 @@
         var temp = "";
                   document.getElementById('boxes').innerHTML += ("<h2> " +currPerson+ " Results: " + "</h2><br><br>")
 
+         console.log(score)
+
           document.getElementById('boxes').innerHTML += ("<h3> " +name+ ", Score: "+ score.toFixed(2) +"</h3>")
             temp += ("<br>" + "<p style = 'color:green !important'>" )
 
@@ -281,19 +283,19 @@
 
             //Fill Members
             
-            
+            /*
             for (i = 1; i < range.values.length; i++) {
               var row = range.values[i];
               csa_members[(row[3].toUpperCase().trim()+ "_" + row[4].toUpperCase().trim())] = ( new Member(row))
               // Print columns A and E, which correspond to indices 0 and 4.
-             console.log(csa_members[(row[3].toUpperCase().trim()+ "_" + row[4].toUpperCase().trim())])
+            // console.log(csa_members[(row[3].toUpperCase().trim()+ "_" + row[4].toUpperCase().trim())])
               appendPre(row[3] + ' '+ row[4]+" | " + row[2] +" | " + row[11] +"\n");
             }
+*/
 
+             //Uncomment this to use a local database
 
-             //Uncomment this to use a local database variable
-
-           //csa_members = csa_database
+           csa_members = csa_database
            // console.log(csa_members)
           } else {
             appendPre('No data found.');
